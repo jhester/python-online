@@ -20,23 +20,21 @@
 "/"                   	return '/';
 "-"                   	return '-';
 "+"                   	return '+';
-"^"                   	return '^';
-"!"                   	return '!';
 "%"                   	return '%';
 "("                   	return '(';
 ")"						return ')';
 "PI"					return 'PI';
 "E"						return 'E';
 "*"						return '*';
+"!="					return "!=";
+"<="					return '<=';
+">="					return '>=';
+"=="					return '==';
 "="						return '=';
 ":"						return ':';
 ","						return ',';
 "<"						return '<';
 ">"						return '>';
-"<="					return '<=';
-">="					return '>=';
-"=="					return '==';
-"!="					return '!=';
 "if"					return 'if';
 "else"					return 'else';
 "def"					return 'def';
@@ -120,7 +118,7 @@ funcdef
 	}
 ;
 selection 
-	: 'if' expr ':' stmt 'end'	{
+	: 'if' expr ':' stmt  'end'	{
 		$$ = new AstNode('if', {left : $2, right : $4});
 	}
 	| 'if' expr ':' stmt 'else' ':' stmt 'end'	{

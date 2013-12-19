@@ -236,7 +236,7 @@ function eval(astNode) {
 				strPrint = v;
 			}
 			// Print 
-			jqconsole.Write('	'+strPrint+'\n', 'jqconsole-output');
+			jqconsole.Write(strPrint+'\n', 'jqconsole-output');
 			break;
 		case 'return': v = eval(astNode.left); break; 
 		case 'NUMBER': v = astNode.value; break;

@@ -88,10 +88,10 @@ parm_list
 	}
 	| 'NUMBER' {
 		$$ = [];
-		$$.push({name : null, value : Number($1)})
+		$$.push({name : null, value : Number(yytext)})
 	}
 	| 'NUMBER' ',' parm_list {
-		$3.push({name : null, value : Number($3)})
+		$3.push({name : null, value : Number(yytext)})
 		$$ = $3;
 	}
 	| { $$ = []; }
@@ -113,7 +113,7 @@ stmt
 funcdef 
 	: 'def' id '(' parm_list ')' ':' stmt 'end' { 
 		// AST for function, add to function table
-		var mainFunc = new AstNode('function', {left : $7, name : $2, parameters : $4});
+		var mainFunc = new AstNode('function', {left : $7, name : $2, parameters : $4.reverse()});
 		functions[$2] = mainFunc; 
 	}
 ;
@@ -145,13 +145,13 @@ line
 
 	| line id '(' parm_list ')' {
 		// Function call
-		$$ = new AstNode('FunctionCall', {name : $2, parameters : $4});
+		$$ = new AstNode('FunctionCall', {name : $2, parameters : $4.reverse()});
 	}
 
 	| line id '=' id '(' parm_list ')' {
 		// Function call and assign
 		var lf= new AstNode('IDENT', {name : $2});			
-		var call = new AstNode('FunctionCall', {method : $4, parameters : $6});
+		var call = new AstNode('FunctionCall', {method : $4, parameters : $6.reverse()});
 		$$ = new AstNode('=', {left : lf, right : call});
 	}
 	

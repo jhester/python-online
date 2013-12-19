@@ -99,11 +99,13 @@ case 3:
 break;
 case 4:
 		this.$ = [];
-		this.$.push({name : null, value : Number($$[$0])})
+		console.log(yytext);
+		this.$.push({name : null, value : Number(yytext)})
 	
 break;
 case 5:
-		$$[$0].push({name : null, value : Number($$[$0])})
+		console.log(yytext);		
+		$$[$0].push({name : null, value : Number(yytext)})
 		this.$ = $$[$0];
 	
 break;
@@ -125,7 +127,7 @@ case 10: this.$ = new AstNode('no-op');
 break;
 case 11: 
 		// AST for function, add to function table
-		var mainFunc = new AstNode('function', {left : $$[$0-1], name : $$[$0-6], parameters : $$[$0-4]});
+		var mainFunc = new AstNode('function', {left : $$[$0-1], name : $$[$0-6], parameters : $$[$0-4].reverse()});
 		functions[$$[$0-6]] = mainFunc; 
 	
 break;
@@ -155,13 +157,13 @@ case 16:
 break;
 case 17:
 		// Function call
-		this.$ = new AstNode('FunctionCall', {name : $$[$0-3], parameters : $$[$0-1]});
+		this.$ = new AstNode('FunctionCall', {name : $$[$0-3], parameters : $$[$0-1].reverse()});
 	
 break;
 case 18:
 		// Function call and assign
 		var lf= new AstNode('IDENT', {name : $$[$0-5]});			
-		var call = new AstNode('FunctionCall', {method : $$[$0-3], parameters : $$[$0-1]});
+		var call = new AstNode('FunctionCall', {method : $$[$0-3], parameters : $$[$0-1].reverse()});
 		this.$ = new AstNode('=', {left : lf, right : call});
 	
 break;

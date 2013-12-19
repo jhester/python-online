@@ -1,0 +1,92 @@
+body {
+	background-color : #323232;
+}
+
+#editor { 
+    position: absolute;
+    top: 55px;
+    right: 0;
+    bottom: 208px;
+    left: 0;
+}
+
+/* Navbar / Run button bar */
+#navbar {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left : 0;
+	height: 44px;
+	background-color:#3B3B3B;
+	-webkit-box-shadow: 0px 6px 5px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 6px 5px 0px rgba(0,0,0,0.75);
+	box-shadow: 0px 6px 5px 0px rgba(0,0,0,0.75);
+}
+
+#runbtn {
+	position: absolute;
+	height : 80%;
+	left : 0;
+}
+
+#clearbtn {
+	position: absolute;
+	height : 24px;
+	right : 0;
+	bottom: 0;
+	z-index:1000000;
+}
+
+#examples {
+	position: absolute;
+	right : 0;
+}
+
+/* The console container element */
+#console {
+	padding: 0px;
+	margin:0px;
+	position: absolute;
+	right :0;
+	height: 200px;
+	bottom : 0;
+	left : 0;
+	background-color:black;
+	border-top: 2px solid #3B3B3B;
+}
+/* The inner console element. */
+.jqconsole {
+    padding: 0px;
+	padding-left:2px;
+	margin:0px;
+}
+/* The cursor. */
+.jqconsole-cursor {
+    background-color: gray;
+}
+/* The cursor color when the console looses focus. */
+.jqconsole-blurred .jqconsole-cursor {
+    background-color: #666;
+}
+/* The current prompt text color */
+.jqconsole-prompt {
+    color: #0d0;
+}
+/* The command history */
+.jqconsole-old-prompt {
+    color: #0b0;
+    font-weight: normal;
+}
+/* The text color when in input mode. */
+.jqconsole-input {
+    color: #dd0;
+}
+/* Previously entered input. */
+.jqconsole-old-input {
+    color: #bb0;
+    font-weight: normal;
+}
+/* The text color of the output. */
+.jqconsole-output {
+    color: white;
+}

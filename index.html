@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Python online</title>
+<script src="grammar/piethon.js"></script>
+<script src="main.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="styles.css">
+</head>
+<body>
+<div id="editor">def foo(items):
+	x = 10
+	return x
+end
+</div>
+<div id="navbar">
+	<button id="runbtn">Run</button>
+	<select id="examples" name="Examples">
+	  <option value="hellowworld">Examples</option>
+	  <option value="hellowworld">--Hello, World</option>
+	  <option value="recfib">--Recursive Fibonacci</option>	
+	</select>
+</div>
+<div id="console">
+	<button id="clearbtn">Clear</button>
+</div>
+
+<script src="lib/jquery.js" type="text/javascript" charset="utf-8"></script>
+<script src="lib/jqconsole.js" type="text/javascript" charset="utf-8"></script>
+<script src="lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+	// Set up the console
+	$(function () {
+		var jqconsole = $('#console').jqconsole('Hi\n', '>>>');
+		var startPrompt = function () {
+		  // Start the prompt with history enabled.
+		  jqconsole.Prompt(true, function (input) {
+		    // Output input with the class jqconsole-output.
+		    jqconsole.Write(input + '\n', 'jqconsole-output');
+		    // Restart the prompt.
+		    startPrompt();
+		  });
+		};
+		//startPrompt();
+	
+		// Set up the editor
+		var editor = ace.edit("editor");
+		editor.setTheme("ace/theme/idle_fingers");
+		editor.getSession().setMode("ace/mode/python");
+
+		// Handle run button interaction
+		$( "#runbtn" ).click(function() {
+			try {
+				// Grammar is not perfect, have to have it end with a line break
+				var output = piethon.parse(editor.getValue()+'\n')
+				if(output == true) {
+					jqconsole.Write('>> piethon\nSyntactically correct program.\nRunning program:\n', 'jqconsole-output');
+					jqconsole.Write('	'+output+'\n', 'jqconsole-output');
+				} 
+			} catch(exception) {
+				jqconsole.Write('>> piethon\n'+exception + '\n', 'jqconsole-output');
+			}
+		});
+		
+		// Clear console button
+		$( "#clearbtn" ).click(function() {
+			jqconsole.Reset();
+		});
+	 });
+	
+</script>
+</body>
+</html>

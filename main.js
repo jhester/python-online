@@ -107,7 +107,7 @@ function eval(astNode) {
 			// Get function node and evaluate it
 			funcName = astNode.name;
 		 	functionNode = functions[funcName];
-			if(!functionNode) {
+			if(!funcName in functions) {
 				throw "NameError: function named '"+funcName+"' is not defined";
 			}
 			
@@ -126,10 +126,10 @@ function eval(astNode) {
 				var funcpari = functionparams[i];
 				if(callpari.name) {
 					var identifierValue = executionstack.top()[callpari.name];
-					if(!identifierValue) {
+					if(!callpari.name in executionstack.top()) {
 						throw "NameError: name '"+astNode.name+"' is not defined\n";
 					}
-					newstackframe[funcpari.name] = executionstack.top()[callpari.name];
+					newstackframe[funcpari.name] = identifierValue
 				} else {
 					// Otherwise just set to value
 					newstackframe[funcpari.name] = callpari.value;
@@ -167,7 +167,7 @@ function eval(astNode) {
 		case 'IDENT': 
 			// Look up value in table
 			var identifierValue = executionstack.top()[astNode.name];
-			if(!identifierValue) {
+			if(!astNode.name in executionstack.top()) {
 				throw "NameError: name '"+astNode.name+"' is not defined\n";
 			}
 			v = identifierValue;

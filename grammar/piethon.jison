@@ -15,7 +15,7 @@
 <OTHER_COMMENT>.          	{ ; }
 
 
-"\""[\s\S]*"\""			{console.log(yytext);return 'STRING';}
+"\""[\s\S]*"\""			{ return 'STRING';}
 "**"                   	return '**';
 "/"                   	return '/';
 "-"                   	return '-';
@@ -86,12 +86,12 @@ parm_list
 		$3.push({name : $1, value : null})
 		$$ = $3;
 	}
-	| 'NUMBER' {
+	| num {
 		$$ = [];
-		$$.push({name : null, value : Number(yytext)})
+		$$.push({name : null, value : $1})
 	}
-	| 'NUMBER' ',' parm_list {
-		$3.push({name : null, value : Number(yytext)})
+	| num ',' parm_list {
+		$3.push({name : null, value : $1})
 		$$ = $3;
 	}
 	| { $$ = []; }
@@ -151,7 +151,7 @@ line
 	| line id '=' id '(' parm_list ')' {
 		// Function call and assign
 		var lf= new AstNode('IDENT', {name : $2});			
-		var call = new AstNode('FunctionCall', {method : $4, parameters : $6.reverse()});
+		var call = new AstNode('FunctionCall', {name : $4, parameters : $6.reverse()});
 		$$ = new AstNode('=', {left : lf, right : call});
 	}
 	
@@ -199,7 +199,7 @@ expr
 	| expr '!=' expr	{ $$ = new AstNode('!=', {left : $1, right : $3});}
 	| expr '==' expr		{ $$ = new AstNode('==', {left : $1, right : $3});}
 	| '-' expr %prec UMINUS	{ $$ = new AstNode('UMINUS', {left : $2}); }
-	| 'NUMBER'	{ $$ = new AstNode('NUMBER', {value : Number(yytext)}); }
+	| num	{ $$ = new AstNode('NUMBER', {value : $1}); }
 	| id		{ $$ = new AstNode('IDENT', {name : $1});	}
 	| id '[' expr ']' { $$ = new AstNode('arrayindex', {name : $1, index : $3}); }
 	| 'len' '(' id ')' {$$ = new AstNode('len', {name : $3});}
@@ -208,4 +208,7 @@ expr
 
 id 
 	: 'IDENT' {$$ = yytext;}
+	;
+num 
+	: 'NUMBER' {$$ = Number(yytext);}
 	;

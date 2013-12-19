@@ -14,7 +14,9 @@
 <OTHER_COMMENT>\n       	{ this.begin('INITIAL'); }
 <OTHER_COMMENT>.          	{ ; }
 
-"*"                   	return '*';
+
+"\""[\s\S]*"\""			{console.log(yytext);return 'STRING';}
+"**"                   	return '**';
 "/"                   	return '/';
 "-"                   	return '-';
 "+"                   	return '+';
@@ -25,7 +27,7 @@
 ")"						return ')';
 "PI"					return 'PI';
 "E"						return 'E';
-"**"					return '**';
+"*"						return '*';
 "="						return '=';
 ":"						return ':';
 ","						return ',';
@@ -61,8 +63,8 @@
 %left  '*' '/' '%'
 %left  '**'
 %left  '<' '<=' '>' '>=' '==' '!='
+%left UMINUS
 
-%nonassoc UMINUS
 %nonassoc IF_WITHOUT_ELSE
 %nonassoc ELSE
 
@@ -71,7 +73,10 @@
 %% /* language grammar */
 
 startproduction   
-	: stmt
+	: stmt { 
+		finalprogram = $1;
+		// Maybe remove all function branches?, then execute the one statement
+	}
 ;
 
 parm_list 
@@ -102,7 +107,7 @@ stmt
 		$$ = new AstNode('Statement', {left : $1, right :$2});
 	}
 	| stmt funcdef 'CR'	{
-		$$ = new AstNode('Statement', {left : $1, right :$2});
+		$$ = new AstNode('Statement', {left : $1, right : new AstNode('no-op') });
 	}
 	| { $$ = new AstNode('no-op'); } // No-op
 ;
@@ -110,7 +115,7 @@ stmt
 funcdef 
 	: 'def' id '(' parm_list ')' ':' stmt 'end' { 
 		// AST for function, add to function table
-		var mainFunc = new AstNode('function', {left : $7, right : null, name : $2, params : $4});
+		var mainFunc = new AstNode('function', {left : $7, name : $2, parameters : $4});
 		functions[$2] = mainFunc; 
 	}
 ;
@@ -142,7 +147,7 @@ line
 
 	| line id '(' parm_list ')' {
 		// Function call
-		$$ = new AstNode('FunctionCall', {method : $2, parameters : $4});
+		$$ = new AstNode('FunctionCall', {name : $2, parameters : $4});
 	}
 
 	| line id '=' id '(' parm_list ')' {
@@ -155,7 +160,7 @@ line
 	| line id '=' '[' parm_list ']' {
 		// Array creation and assignment
 		var lf= new AstNode('IDENT', {name : $2});
-		var arr = new AstNode('array', {array : $5.reverse()});
+		var arr = new AstNode('array', {value : $5.reverse()});
 		$$ = new AstNode('=', {left :lf, right : arr});
 	}
 	
@@ -195,11 +200,12 @@ expr
 	| expr '>=' expr	{ $$ = new AstNode('>=', {left : $1, right : $3});}
 	| expr '!=' expr	{ $$ = new AstNode('!=', {left : $1, right : $3});}
 	| expr '==' expr		{ $$ = new AstNode('==', {left : $1, right : $3});}
-	| '-' expr %prec UMINUS	{ $$ = new AstNode('M', {left : $1, right : null}); }
+	| '-' expr %prec UMINUS	{ $$ = new AstNode('UMINUS', {left : $2}); }
 	| 'NUMBER'	{ $$ = new AstNode('NUMBER', {value : Number(yytext)}); }
 	| id		{ $$ = new AstNode('IDENT', {name : $1});	}
 	| id '[' expr ']' { $$ = new AstNode('arrayindex', {name : $1, index : $3}); }
 	| 'len' '(' id ')' {$$ = new AstNode('len', {name : $3});}
+	| 'STRING' {$$ = new AstNode('STRING', {value: yytext}); }
 	;
 
 id 

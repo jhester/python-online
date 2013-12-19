@@ -29,7 +29,6 @@ end
 <script src="lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
 	// Set up the console
-	$(function () {
 		var jqconsole = $('#console').jqconsole('Hi\n', '>>>');
 		var startPrompt = function () {
 		  // Start the prompt with history enabled.
@@ -49,15 +48,16 @@ end
 
 		// Handle run button interaction
 		$( "#runbtn" ).click(function() {
+			resetForRun();
 			try {
 				// Grammar is not perfect, have to have it end with a line break
 				var output = piethon.parse(editor.getValue()+'\n')
 				if(output == true) {
-					jqconsole.Write('>> piethon\nSyntactically correct program.\nRunning program:\n', 'jqconsole-output');
-					jqconsole.Write('	'+output+'\n', 'jqconsole-output');
+					jqconsole.Write('>> piethon\nSyntactically correct program: '+output+'\nRunning program:\n', 'jqconsole-output');
+					eval(finalprogram);
 				} 
 			} catch(exception) {
-				jqconsole.Write('>> piethon\n'+exception + '\n', 'jqconsole-output');
+				jqconsole.Write(exception + '\n', 'jqconsole-output');
 			}
 		});
 		
@@ -65,7 +65,7 @@ end
 		$( "#clearbtn" ).click(function() {
 			jqconsole.Reset();
 		});
-	 });
+	 
 	
 </script>
 </body>

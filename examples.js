@@ -16,6 +16,9 @@ var examples = [{
 }, {
 	name : 'Fibonnaci',
 	code : "'''This program tests recursion by calculating the fibbonacci sequence!\n\tThis has a prerequisite of testing return values.'''\t\n\ndef fibonnaci(n):\n\tif n == 0:\n\t\treturn 0\n\telse:\n\t\tif n == 1:\n\t\t\treturn 1\n\t\telse:\n\t\t\tn1 = n-1\n\t\t\tn2 = n-2\n\t\t\tf1 = fibonnaci(n1)\n\t\t\tf2 = fibonnaci(n2)\n\t\t\treturn  f1 + f2\n\t\tend\n\tend\t\nend\n\n\na = fibonnaci(0)\nprint a\na = fibonnaci(1)\nprint a\na = fibonnaci(2)\nprint a\na = fibonnaci(3)\nprint a\na = fibonnaci(4)\nprint a\na = fibonnaci(5)\nprint a\n"
+},{
+	name : 'Factorial',
+	code : "'''Simple factorial, uses recursion wooo'''\ndef factorial(n):\n    if n < 2:\n        return 1\n    else:\n        n1 = n - 1\n        f = factorial(n1)\n        return n * f \n    end\nend\n\nx = factorial(10)\nprint x"
 }, {
 	name : 'Lists',
 	code : "'''Testing out the use of arrays\n\tObviously limited, since we dont have classes.\n\tWe can only create, assign by index, fetch by index and use a limited number of operations'''\ndef test(array):\n\tarray.append(11)\n\treturn array\nend\n\ndef clear(array):\n\twhile len(array) > 0:\n\t\tarray.pop()\n\tend\n\treturn array\nend\n\n\nb = 9\na = [1,b,3.2,4,5.2,6,7,8]\nd = []\nprint a\nprint a[0]\nc = a[4]\nprint c\na[5] = 22\nprint a[5]\nprint a\n# empty list test\nprint d\n# length of a list test\ne = len(a)\nprint e\n# this throws an error len(b)\n\nd.append(2)\nd.append(6)\nprint d\nd.pop()\nprint d\nd = test(d)\nprint d\na = clear(a)\nprint a"

@@ -1,7 +1,10 @@
 var examples = [{
 	name : "Hello, World",
 	code : '# Say hello\nprint "Hello, World"'
-}, {
+},{
+	name : 'Strings',
+	code : '# String concatentation and printing\nx = "Hello, World"\ny = "Hello, Piethon"\n\nprint x + ", or, " + y'
+},{
 	name : "Math",
 	code : "'''This program tests if assignment works.\nTests if printing identifiers works.\nTests various math operations'''\n\nx = 23 / 2 + 15.0 % 3.0 ** 2 * -4\ny = 6\nz = y / 2\nprint 5\nprint x\nprint y\nprint z"
 }, {

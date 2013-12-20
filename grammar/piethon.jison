@@ -15,7 +15,6 @@
 <OTHER_COMMENT>.          	{ ; }
 
 
-"\""[\s\S]*"\""			{ return 'STRING';}
 "**"                   	return '**';
 "/"                   	return '/';
 "-"                   	return '-';
@@ -50,6 +49,7 @@
 
 [0-9]+("."[0-9]+)?\b  	{return 'NUMBER';}
 [a-zA-Z]([a-zA-Z]|[0-9])* { return 'IDENT';}
+"\"".*"\""			{ console.log(yytext); return 'STRING';}
 \n						{ return 'CR';}
 .                     	{ ; }
 
@@ -164,12 +164,12 @@ line
 	
 	| line id '.' id '(' expr ')' { 
 		// Method dispatch, with single argument
-		$$ = new AstNode('method', { object : $2, method : $4, argument : $6});
+		$$ = new AstNode('method', { name : $2, method : $4, argument : $6});
 	}
 	
 	| line id '.' id '(' ')' { 
 		// No argument method dispatch
-		$$ = new AstNode('method', { object : $2, method : $4});
+		$$ = new AstNode('method', { name : $2, method : $4});
 	}
 	
 	| line 'print' expr {

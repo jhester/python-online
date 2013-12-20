@@ -37,72 +37,64 @@ function eval(astNode) {
 			eval(astNode.left); 
 			v = eval(astNode.right); 
 			break; 
-	/*	case 'A':
+		case 'array':
 			// Handle the right hand side of an array declaration
 			// Set the values to real values
-			vec = new std::vector<Primitive>();
-			members = *astNode->getMembers();
-			for(int i=0;i<members.size();i++) {
-				if(members[i].name == "") {
-					vec->push_back(members[i].value);
+			var vec = [];
+			
+			var members = astNode.value;
+			for(var i=0;i<members.length;i++) {
+				if(!members[i].name) {
+					vec.push(members[i].value);
 				} else {
-					stackitr = executionstack.top().find(members[i].name);
-					if(stackitr == executionstack.top().end()) {
-						std::cout << "	Semantics error: undefined variables in array declaration" << std::endl;				
-						exit (EXIT_FAILURE);
+					var identifierValue = executionstack.top()[members[i].name];
+					if(!members[i].name in executionstack.top()) {
+						throw "NameError: name '"+members[i].name+"' is not defined in list declaration\n";
 					}
-					vec->push_back(executionstack.top()[members[i].name]);
+					vec.push(identifierValue);
 				}
 			}
-			v = Primitive(vec);
-			v.type = ARRAY;
+			v = vec;
 			break;
 		case 'arrayindex':
 			// Handle rhs of a array index value retrieval
-			stackitr = executionstack.top().find(astNode->getName());
-			if(stackitr == executionstack.top().end()) {
-				std::cout << "	Semantics error: list named " << astNode->getName() << " not defined" << std::endl;				
-				exit (EXIT_FAILURE);
+			var identifierValue = executionstack.top()[astNode.name];
+			if(!astNode.name in executionstack.top()) {
+				throw "NameError: name '"+astNode.name+"' is not defined\n";
 			}
-			
-			vec2 = *(executionstack.top()[astNode->getName()].array);
-			v = vec2[(int)eval(astNode.left).value];
+			v = identifierValue[parseInt(eval(astNode.index))]
 			break;
-		case 'l':
+		case 'len':
 			// Handle len()
-			stackitr = executionstack.top().find(astNode->getName());
-			if(stackitr == executionstack.top().end()) {
-				std::cout << "	Semantics error: list named " << astNode->getName() << " not defined" << std::endl;				
-				exit (EXIT_FAILURE);
-			}
-			if(executionstack.top()[astNode->getName()].type != ARRAY) {
-				std::cout << "	Semantics error: " << astNode->getName() << " is not a list, cant call len()" << std::endl;				
-				exit (EXIT_FAILURE);
-			}
-			vec2 = *(executionstack.top()[astNode->getName()].array);
-			v = Primitive((int)vec2.size());
-			break;
-		case 'm':
-			// Handle list.append(expr) and list.pop(expr)
-			stackitr = executionstack.top().find(astNode->getName());
-			if(stackitr == executionstack.top().end()) {
-				std::cout << "	Semantics error: list named " << astNode->getName() << " not defined" << std::endl;				
-				exit (EXIT_FAILURE);
-			}
-			if(executionstack.top()[astNode->getName()].type != ARRAY) {
-				std::cout << "	Semantics error: " << astNode->getName() << " is not a list, cant call append()" << std::endl;				
-				exit (EXIT_FAILURE);
-			}
-			if(astNode->getMethod() == "append") {
-				executionstack.top()[astNode->getName()].array->push_back(eval(astNode.left));
-			} else if(astNode->getMethod() == "pop") {
-				executionstack.top()[astNode->getName()].array->pop_back();
-			} else {
-				std::cout << "	Semantics error: " << astNode->getMethod()  << " method not supported" << std::endl;				
-				exit (EXIT_FAILURE);
+			var identifierValue = executionstack.top()[astNode.name];
+			if(!astNode.name in executionstack.top()) {
+				throw "NameError: name '"+astNode.name+"' is not defined in list declaration\n";
 			}
 			
-			break;	*/
+			if(!Array.isArray(identifierValue)) {
+				throw "TypeError: object of type '"+(typeof identifierValue)+"' has no len()";
+			}
+			v = identifierValue.length;
+			break; 
+		case 'method':
+			// Handle list.append(expr) and list.pop(expr)
+			var identifierValue = executionstack.top()[astNode.name];
+			if(!astNode.name in executionstack.top()) {
+				throw "NameError: name '"+astNode.name+"' is not defined in list declaration\n";
+			}
+			if(!Array.isArray(identifierValue)) {
+				throw "AttributeError: '"+(typeof identifierValue)+"' object has no attribute '"+astNode.method+"'";
+			}
+
+			if(astNode.method == "append") {
+				identifierValue.push(eval(astNode.argument));
+			} else if(astNode.method == "pop") {
+				identifierValue.pop();				
+			} else {
+				throw "AttributeError: '"+astNode.name+"' has no method '"+astNode.method+"'";
+			}
+			
+			break;	
 		case 'FunctionCall':
 			// Get function node and evaluate it
 			funcName = astNode.name;
@@ -175,8 +167,8 @@ function eval(astNode) {
 		case '=':
 			// Set value of identifier in table
 			if(astNode.left.type == 'arrayindex') {
-				var vec2 = executionstack.top()[astNode.left.name].value;
-				vec2[parseInt(eval(astNode.left.left))] = eval(astNode.right);
+				var vec2 = executionstack.top()[astNode.left.name];
+				vec2[parseInt(eval(astNode.left.index))] = eval(astNode.right);
 			} else {
 				executionstack.top()[astNode.left.name] = eval(astNode.right);	
 			}

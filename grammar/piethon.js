@@ -174,12 +174,12 @@ case 19:
 break;
 case 20: 
 		// Method dispatch, with single argument
-		this.$ = new AstNode('method', { object : $$[$0-5], method : $$[$0-3], argument : $$[$0-1]});
+		this.$ = new AstNode('method', { name : $$[$0-5], method : $$[$0-3], argument : $$[$0-1]});
 	
 break;
 case 21: 
 		// No argument method dispatch
-		this.$ = new AstNode('method', { object : $$[$0-4], method : $$[$0-2]});
+		this.$ = new AstNode('method', { name : $$[$0-4], method : $$[$0-2]});
 	
 break;
 case 22:
@@ -717,73 +717,73 @@ case 5: this.begin('INITIAL');
 break;
 case 6: ; 
 break;
-case 7: return 41;
+case 7:return 31;
 break;
-case 8:return 31;
+case 8:return 32;
 break;
-case 9:return 32;
+case 9:return 29;
 break;
-case 10:return 29;
+case 10:return 28;
 break;
-case 11:return 28;
+case 11:return 33;
 break;
-case 12:return 33;
+case 12:return 14;
 break;
-case 13:return 14;
+case 13:return 15;
 break;
-case 14:return 15;
+case 14:return 'PI';
 break;
-case 15:return 'PI';
+case 15:return 'E';
 break;
-case 16:return 'E';
+case 16:return 30;
 break;
-case 17:return 30;
+case 17:return "!=";
 break;
-case 18:return "!=";
+case 18:return 35;
 break;
-case 19:return 35;
+case 19:return 37;
 break;
-case 20:return 37;
+case 20:return 39;
 break;
-case 21:return 39;
+case 21:return 22;
 break;
-case 22:return 22;
+case 22:return 16;
 break;
-case 23:return 16;
+case 23:return 7;
 break;
-case 24:return 7;
+case 24:return 34;
 break;
-case 25:return 34;
+case 25:return 36;
 break;
-case 26:return 36;
+case 26:return 18;
 break;
-case 27:return 18;
+case 27:return 20;
 break;
-case 28:return 20;
+case 28:return 13;
 break;
-case 29:return 13;
+case 29:return 'pass';
 break;
-case 30:return 'pass';
+case 30:return 26;
 break;
-case 31:return 26;
+case 31:return 17;
 break;
-case 32:return 17;
+case 32:return 27;
 break;
-case 33:return 27;
+case 33:return 23;
 break;
-case 34:return 23;
+case 34:return 24;
 break;
-case 35:return 24;
+case 35:return 25;
 break;
-case 36:return 25;
+case 36:return 40;
 break;
-case 37:return 40;
+case 37:return 21;
 break;
-case 38:return 21;
+case 38:return 43;
 break;
-case 39:return 43;
+case 39: return 42;
 break;
-case 40: return 42;
+case 40: console.log(yy_.yytext); return 41;
 break;
 case 41: return 10;
 break;
@@ -791,7 +791,7 @@ case 42: ;
 break;
 }
 },
-rules: [/^(?:''')/,/^(?:''')/,/^(?:\n)/,/^(?:.)/,/^(?:#)/,/^(?:\n)/,/^(?:.)/,/^(?:"[\s\S]*")/,/^(?:\*\*)/,/^(?:\/)/,/^(?:-)/,/^(?:\+)/,/^(?:%)/,/^(?:\()/,/^(?:\))/,/^(?:PI\b)/,/^(?:E\b)/,/^(?:\*)/,/^(?:!=)/,/^(?:<=)/,/^(?:>=)/,/^(?:==)/,/^(?:=)/,/^(?::)/,/^(?:,)/,/^(?:<)/,/^(?:>)/,/^(?:if\b)/,/^(?:else\b)/,/^(?:def\b)/,/^(?:pass\b)/,/^(?:print\b)/,/^(?:end\b)/,/^(?:return\b)/,/^(?:\[)/,/^(?:\])/,/^(?:\.)/,/^(?:len\b)/,/^(?:while\b)/,/^(?:[0-9]+(\.[0-9]+)?\b)/,/^(?:[a-zA-Z]([a-zA-Z]|[0-9])*)/,/^(?:\n)/,/^(?:.)/],
+rules: [/^(?:''')/,/^(?:''')/,/^(?:\n)/,/^(?:.)/,/^(?:#)/,/^(?:\n)/,/^(?:.)/,/^(?:\*\*)/,/^(?:\/)/,/^(?:-)/,/^(?:\+)/,/^(?:%)/,/^(?:\()/,/^(?:\))/,/^(?:PI\b)/,/^(?:E\b)/,/^(?:\*)/,/^(?:!=)/,/^(?:<=)/,/^(?:>=)/,/^(?:==)/,/^(?:=)/,/^(?::)/,/^(?:,)/,/^(?:<)/,/^(?:>)/,/^(?:if\b)/,/^(?:else\b)/,/^(?:def\b)/,/^(?:pass\b)/,/^(?:print\b)/,/^(?:end\b)/,/^(?:return\b)/,/^(?:\[)/,/^(?:\])/,/^(?:\.)/,/^(?:len\b)/,/^(?:while\b)/,/^(?:[0-9]+(\.[0-9]+)?\b)/,/^(?:[a-zA-Z]([a-zA-Z]|[0-9])*)/,/^(?:".*")/,/^(?:\n)/,/^(?:.)/],
 conditions: {"OTHER_COMMENT":{"rules":[0,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42],"inclusive":true},"COMMENT":{"rules":[1,2,3],"inclusive":false},"INITIAL":{"rules":[0,4,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42],"inclusive":true}}
 };
 return lexer;

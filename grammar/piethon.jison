@@ -59,7 +59,7 @@
 
 %left  '+' '-'
 %left  '*' '/' '%'
-%left  '**'
+%right  '**'
 %left  '<' '<=' '>' '>=' '==' '!='
 %left UMINUS
 

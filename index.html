@@ -1,85 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<title>Piethon online</title>
-<script src="grammar/piethon.js"></script>
-<script src="main.js"></script>
-<script src="examples.js"></script>
-<link rel="stylesheet" type="text/css" media="screen" href="styles.css">
+	<title>Piethon online</title>
+	<script src="grammar/piethon.js"></script>
+	<script src="main.js"></script>
+	<script src="examples.js"></script>
+	<script src="editorTheme.js"></script>
+	<link rel="stylesheet" type="text/css" media="screen" href="styles.css">
 </head>
+
 <body>
-<div id="editor"># Say hello!
-x = "Hello, piethon"
-print x
-</div>
-<div id="navbar">
-	<button id="runbtn">Run</button>
-	<select id="examples" name="Examples">
-	  <option value="-1">Examples</option>
-	</select>
-</div>
-<div id="console">
-	<button id="clearbtn">Clear</button>
-</div>
+	<div class="container">
+		<div id="editor">print "Hello, World"</div>
+		<div id="navbar">
+			<button id="runbtn">Run</button>
+			<button id="clearbtn">Clear</button>
+			<select id="examples" name="Examples">
+				<option value="-1">Examples</option>
+			</select>
 
-<script src="lib/jquery.js" type="text/javascript" charset="utf-8"></script>
-<script src="lib/jqconsole.js" type="text/javascript" charset="utf-8"></script>
-<script src="lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-<script>
-	// Set up the console
-	var jqconsole = $('#console').jqconsole('', '>>>');
-	var startPrompt = function () {
-	  // Start the prompt with history enabled.
-	  jqconsole.Prompt(true, function (input) {
-	    // Output input with the class jqconsole-output.
-	    jqconsole.Write(input + '\n', 'jqconsole-output');
-	    // Restart the prompt.
-	    startPrompt();
-	  });
-	};
-	//startPrompt();
-	jqconsole.Write('>> ','jqconsole-output');
-	// Set up the editor
-	var editor = ace.edit("editor");
-	editor.setTheme("ace/theme/idle_fingers");
-	editor.getSession().setMode("ace/mode/python");
+		</div>
+		<div id="console">
 
-	// Handle run button interaction
-	$( "#runbtn" ).click(function() {
-		resetForRun();
-		try {
-			// Grammar is not perfect, have to have it end with a line break
-			var output = piethon.parse(editor.getValue()+'\n')
-			if(output == true) {
-				jqconsole.Write('piethon\nSyntactically correct program: '+output+'\nRunning program:\n', 'jqconsole-output');
-				eval(finalprogram);
-				jqconsole.Write('\n', 'jqconsole-output');
-			} 
-		} catch(exception) {
-			jqconsole.Write(exception + '\n\n', 'jqconsole-output');
+		</div>
+		<div id="footer">
+			<select id="editorTheme" name="editorTheme">
+				<option value="-1">Theme</option>
+			</select>
+			<!-- fork it on github -->
+		</div>
+	</div>
+
+	<script src="lib/jquery.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lib/jqconsole.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+		// Set up the console
+		var jqconsole = $('#console').jqconsole('', '>>>');
+		var startPrompt = function () {
+			// Start the prompt with history enabled.
+			jqconsole.Prompt(true, function (input) {
+				// Output input with the class jqconsole-output.
+				jqconsole.Write(input + '\n', 'jqconsole-output');
+				// Restart the prompt.
+				startPrompt();
+			});
+		};
+		//startPrompt();
+		jqconsole.Write('>> ', 'jqconsole-output');
+		// Set up the editor
+		var editor = ace.edit("editor");
+		var editorThemeColor = "idle_fingers";
+		editor.setTheme(`ace/theme/idle_fingers`)
+		editor.getSession().setMode("ace/mode/python");
+
+		// Handle run button interaction
+		$("#runbtn").click(function () {
+			resetForRun();
+			try {
+				// Grammar is not perfect, have to have it end with a line break
+				var output = piethon.parse(editor.getValue() + '\n')
+				if (output == true) {
+					jqconsole.Write('piethon\nSyntactically correct program: ' + output + '\nRunning program:\n', 'jqconsole-output');
+					eval(finalprogram);
+					jqconsole.Write('\n', 'jqconsole-output');
+				}
+			} catch (exception) {
+				jqconsole.Write(exception + '\n\n', 'jqconsole-output');
+			}
+			jqconsole.Write('>> ', 'jqconsole-output');
+		});
+
+		// Clear console button
+		$("#clearbtn").click(function () {
+			jqconsole.Reset();
+		});
+		// Populate the dropdown editor theme select
+		var editorThemeSelect = $("#editorTheme");
+		for (var i = 0; i < editorTheme.length; i++) {
+			editorThemeSelect.append(
+				'<option value="' + i + '">--' + editorTheme[i].name + "</option>"
+			);
 		}
-		jqconsole.Write('>> ','jqconsole-output');
-	});
-	
-	// Clear console button
-	$( "#clearbtn" ).click(function() {
-		jqconsole.Reset();
-	});
-	
-	// Populate the dropdown examples select
-	var select = $('#examples');
-	for(var i =0;i<examples.length;i++) {
-		select.append('<option value="'+i+'">--'+examples[i].name+'</option>');
-	}
-	select.change(function() {
-		var selectedndx = parseInt($( "#examples option:selected" ).attr('value'), 10);
-		if(selectedndx > -1) {
-			editor.setValue(examples[selectedndx].code);
-			editor.gotoLine(1);
+		editorThemeSelect.change(function () {
+			var selected = parseInt($("#editorTheme option:selected").attr("value"), 10);
+			if (selected > -1) {
+				editor.setTheme(`ace/theme/${editorTheme[selected].theme}`);
+			}
+		});
+
+		// Populate the dropdown examples select
+		var select = $('#examples');
+		for (var i = 0; i < examples.length; i++) {
+			select.append('<option value="' + i + '">--' + examples[i].name + '</option>');
 		}
-	});
-	 
-	
-</script>
+		select.change(function () {
+			var selectedndx = parseInt($("#examples option:selected").attr('value'), 10);
+			if (selectedndx > -1) {
+				editor.setValue(examples[selectedndx].code);
+				editor.gotoLine(1);
+			}
+		});
+
+
+	</script>
 </body>
+
 </html>

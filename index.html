@@ -6,6 +6,7 @@
 	<script src="grammar/piethon.js"></script>
 	<script src="main.js"></script>
 	<script src="examples.js"></script>
+	<script src="editorTheme.js"></script>
 	<link rel="stylesheet" type="text/css" media="screen" href="styles.css">
 </head>
 
@@ -18,11 +19,15 @@
 			<select id="examples" name="Examples">
 				<option value="-1">Examples</option>
 			</select>
+
 		</div>
 		<div id="console">
 
 		</div>
 		<div id="footer">
+			<select id="editorTheme" name="editorTheme">
+				<option value="-1">Theme</option>
+			</select>
 			<!-- fork it on github -->
 		</div>
 	</div>
@@ -46,7 +51,8 @@
 		jqconsole.Write('>> ', 'jqconsole-output');
 		// Set up the editor
 		var editor = ace.edit("editor");
-		editor.setTheme("ace/theme/idle_fingers");
+		var editorThemeColor = "idle_fingers";
+		editor.setTheme(`ace/theme/idle_fingers`)
 		editor.getSession().setMode("ace/mode/python");
 
 		// Handle run button interaction
@@ -69,6 +75,19 @@
 		// Clear console button
 		$("#clearbtn").click(function () {
 			jqconsole.Reset();
+		});
+		// Populate the dropdown editor theme select
+		var editorThemeSelect = $("#editorTheme");
+		for (var i = 0; i < editorTheme.length; i++) {
+			editorThemeSelect.append(
+				'<option value="' + i + '">--' + editorTheme[i].name + "</option>"
+			);
+		}
+		editorThemeSelect.change(function () {
+			var selected = parseInt($("#editorTheme option:selected").attr("value"), 10);
+			if (selected > -1) {
+				editor.setTheme(`ace/theme/${editorTheme[selected].theme}`);
+			}
 		});
 
 		// Populate the dropdown examples select
